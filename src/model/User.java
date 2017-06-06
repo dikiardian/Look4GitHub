@@ -1,8 +1,11 @@
+package model;
+
 import java.util.List;
 
 /**
  * Created by Diki Ardian W on 6/5/17.
  */
+
 public class User {
   private String username;
   private String namaPengguna;
@@ -10,6 +13,20 @@ public class User {
   private List<Repo> repos;
   private int repoCount;
   private int followerCount;
+
+  public User(String username,
+              String namaPengguna,
+              String email,
+              List<Repo> repos,
+              int repoCount,
+              int followerCount) {
+    this.username = username;
+    this.namaPengguna = namaPengguna;
+    this.email = email;
+    this.repos = repos;
+    this.repoCount = repoCount;
+    this.followerCount = followerCount;
+  }
 
   public String getUsername() {
     return username;

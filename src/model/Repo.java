@@ -1,10 +1,20 @@
 /**
  * Created by Diki Ardian W on 6/5/17.
  */
+
+package model;
+
+
 public class Repo {
   private String nama;
   private String deskripsi;
   private String url;
+
+  public Repo(String nama, String deskripsi, String url) {
+    this.nama = nama;
+    this.deskripsi = deskripsi;
+    this.url = url;
+  }
 
   public String getNama() {
     return nama;
