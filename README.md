@@ -1,6 +1,6 @@
-# Driver
+# Look4GitHub
 
-Driver adalah aplikasi desktop yang menggunakan bahasa Java.
+Look4GitHub adalah aplikasi desktop yang menggunakan bahasa Java.
 Aplikasi ini dapat melakukan pencarian user GitHub dengan memanfaatkan:
 
 ### JSON
@@ -13,7 +13,7 @@ JSON dapat menggunakan bentuk sebagai:
 - *Angka*, mirip dengan angka di C atau Java, kecuali format oktal dan heksadesimal tidak digunakan.
  
 ### REST
-REST (REpresentational State Transfer) adalah arsitektur metode komunikasi yang sering diterapkan dalam pengembangan layanan berbasis web. Biasanya REST dijalankan melalui HTTP. Proses yang dilakukan adalah membaca laman web tertentu yanng memuat file XML atau JSON. Interaksi antara lien dan server difasilitasi dengan sejumlah operasional dan URIs (Universal Resource Identifiers), seperti GET, POST, PUT, DELETE dan sebagainya. Aplikasi Driver ini akan berperan sebagai klien saja yang melakukan request ke server dengan memanfaatkan REST ini.
+REST (REpresentational State Transfer) adalah arsitektur metode komunikasi yang sering diterapkan dalam pengembangan layanan berbasis web. Biasanya REST dijalankan melalui HTTP. Proses yang dilakukan adalah membaca laman web tertentu yanng memuat file XML atau JSON. Interaksi antara lien dan server difasilitasi dengan sejumlah operasional dan URIs (Universal Resource Identifiers), seperti GET, POST, PUT, DELETE dan sebagainya. Aplikasi Look4GitHub ini akan berperan sebagai klien saja yang melakukan request ke server dengan memanfaatkan REST ini.
 
 ### GitHub API
-GitHub API merupakan Application Programming Interface yang disediakan oleh GitHub. API ini berupa sekumpulan perintah, fungsi, dan protokol yang dapat digunakan developer yang memanfaaatkan GitHub sebagai resource. Pada aplikasi Driver ini, Github akan menjadi server dalam konteks REST di atas, sehingga aplikasi ini dapat melakukan request data kepada GitHub dengan protokol-protokol yang sesuai dengan GitHub API yang telah disediakan. Unutk lebih lengkapnya tentang GitHub API dapat dilihat di https://developer.github.com/v3/
+GitHub API merupakan Application Programming Interface yang disediakan oleh GitHub. API ini berupa sekumpulan perintah, fungsi, dan protokol yang dapat digunakan developer yang memanfaaatkan GitHub sebagai resource. Pada aplikasi Look4GitHub ini, Github akan menjadi server dalam konteks REST di atas, sehingga aplikasi ini dapat melakukan request data kepada GitHub dengan protokol-protokol yang sesuai dengan GitHub API yang telah disediakan. Unutk lebih lengkapnya tentang GitHub API dapat dilihat di https://developer.github.com/v3/
