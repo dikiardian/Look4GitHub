@@ -31,14 +31,16 @@ public class SearchEngine {
   private String created;
   private Map<String, User> result;
   private int resultCount;
+  private int pageResult;
   final private String clientID = "82b5ba0bb36f5d8c6b17";
   final private String clientSecret = "347891e79e815871395d936adf803d68af56ef35";
+  final private int resultPerPage = 20;
 
   public SearchEngine(String urlSearch, String searchBy, boolean advanceSearch,
                       String sortBy, String order, String followerMin,
                       String followerMax, String repoMin, String repoMax,
                       String location, String language, String created,
-                      Map<String, User> result, int resultCount) {
+                      Map<String, User> result, int resultCount, int pageResult) {
     this.urlSearch = urlSearch;
     this.searchBy = searchBy;
     this.advanceSearch = advanceSearch;
@@ -53,6 +55,7 @@ public class SearchEngine {
     this.created = created;
     this.result = result;
     this.resultCount = resultCount;
+    this.pageResult = pageResult;
   }
 
   private String getDataRest(String urlSource) {
@@ -80,58 +83,64 @@ public class SearchEngine {
   }
 
   public void searchUsers(String keyword) {
-
-    String finalUrl = urlSearch + keyword + "+in:" + searchBy + "type:user";
+    String url = urlSearch + "order=" + order +
+        "&sort=" + sortBy +
+        "&per_page=" + resultPerPage +
+        "&page=" + pageResult +
+        "&client_id=" + clientID +
+        "&client_secret=" + clientSecret+
+        "&q=" + keyword +
+        "+in:" + searchBy +
+        "+type:user";
     if (advanceSearch) {
-      if (followerMin!="" && followerMax!="") {
-        finalUrl = finalUrl + "+followers:" + followerMin + ".." + followerMax;
+      if (!followerMin.equals("") && !followerMax.equals("")) {
+        url = url + "+followers:" + followerMin + ".." + followerMax;
       }
-      if (repoMin!="" && repoMax!="") {
-        finalUrl = finalUrl + "+repo:" + repoMin + ".." + repoMax;
+      if (!repoMin.equals("") && !repoMax.equals("")) {
+        url = url + "+repo:" + repoMin + ".." + repoMax;
       }
       if (!location.equals("")) {
-        finalUrl = finalUrl + "+location:" + location;
+        url = url + "+location:" + location;
       }
       if (!language.equals("")) {
-        finalUrl = finalUrl + "+language:" + language;
+        url = url + "+language:" + language;
       }
       if (!created.equals("")) {
-        finalUrl = finalUrl + "+created:" + created;
+        url = url + "+created:" + created;
       }
     }
-
     try {
-      String result = getDataRest(finalUrl +
-          "&per_page=100&client_id=" + clientID +
-          "&client_secret=" + clientSecret);
+      String resultString = getDataRest(url);
       JSONParser parser = new JSONParser();
-      JSONObject jsonObject = (JSONObject) parser.parse(result);
+      JSONObject jsonObject = (JSONObject) parser.parse(resultString);
       JSONArray jsonArray = (JSONArray) jsonObject.get("items");
-      int total = Integer.parseInt(jsonObject.get("total_count").toString());
-      if (total > 1000) {
-        total = 1000;
+      if (pageResult==1) {
+        resultCount = Integer.parseInt(jsonObject.get("total_count").toString());
+        if (resultCount > 1000) {
+          resultCount = 1000;
+        }
       }
       int count = 1;
-      int page = 1;
-
-      while (count <= total) {
+      while ((resultPerPage*(pageResult-1) + count <= resultCount) ||
+          (count <= resultPerPage)) {
         for (Object obj : jsonArray) {
           JSONObject jasObj = (JSONObject) obj;
-          System.out.print(count + ". username: " + jasObj.get("login"));
-          System.out.print(" ,  avatar: " + jasObj.get("avatar_url"));
-          System.out.println(" ,  url: " + jasObj.get("url"));
+          result.put(jasObj.get("login").toString(), new User(jasObj.get("login").toString(),
+              jasObj.get("url").toString(), jasObj.get("avatar_url").toString()));
           count++;
-        }
-        if (count < total) {
-          page++;
-          result = getDataRest("https://api.github.com/search/users?q=" + keyword + "in:login&per_page=100&page=" + page + "&client_id=82b5ba0bb36f5d8c6b17&client_secret=347891e79e815871395d936adf803d68af56ef35");
-          jsonObject = (JSONObject) parser.parse(result);
-          jsonArray = (JSONArray) jsonObject.get("items");
         }
       }
     } catch (ParseException e) {
       e.printStackTrace();
     }
+  }
+
+  public String getUrlSearch() {
+    return urlSearch;
+  }
+
+  public void setUrlSearch(String urlSearch) {
+    this.urlSearch = urlSearch;
   }
 
   public String getSearchBy() {
@@ -140,6 +149,22 @@ public class SearchEngine {
 
   public void setSearchBy(String searchBy) {
     this.searchBy = searchBy;
+  }
+
+  public boolean isAdvanceSearch() {
+    return advanceSearch;
+  }
+
+  public void setAdvanceSearch(boolean advanceSearch) {
+    this.advanceSearch = advanceSearch;
+  }
+
+  public String getSortBy() {
+    return sortBy;
+  }
+
+  public void setSortBy(String sortBy) {
+    this.sortBy = sortBy;
   }
 
   public String getOrder() {
@@ -206,6 +231,30 @@ public class SearchEngine {
     this.created = created;
   }
 
+  public Map<String, User> getResult() {
+    return result;
+  }
+
+  public void setResult(Map<String, User> result) {
+    this.result = result;
+  }
+
+  public int getResultCount() {
+    return resultCount;
+  }
+
+  public void setResultCount(int resultCount) {
+    this.resultCount = resultCount;
+  }
+
+  public int getPageResult() {
+    return pageResult;
+  }
+
+  public void setPageResult(int pageResult) {
+    this.pageResult = pageResult;
+  }
+
   public String getClientID() {
     return clientID;
   }
@@ -213,4 +262,6 @@ public class SearchEngine {
   public String getClientSecret() {
     return clientSecret;
   }
+
+
 }

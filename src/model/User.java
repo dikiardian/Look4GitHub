@@ -12,20 +12,25 @@ public class User {
   private String email;
   private List<Repo> repos;
   private int repoCount;
-  private int followerCount;
+  private String userUrl;
+  private String avatarUrl;
 
-  public User(String username,
-              String namaPengguna,
-              String email,
-              List<Repo> repos,
-              int repoCount,
-              int followerCount) {
+  public User(String username, String userUrl, String avatarUrl) {
+    this.username = username;
+    this.userUrl = userUrl;
+    this.avatarUrl = avatarUrl;
+  }
+
+  public User(String username, String namaPengguna, String email,
+              List<Repo> repos, int repoCount, String userUrl,
+              String avatarUrl) {
     this.username = username;
     this.namaPengguna = namaPengguna;
     this.email = email;
     this.repos = repos;
     this.repoCount = repoCount;
-    this.followerCount = followerCount;
+    this.userUrl = userUrl;
+    this.avatarUrl = avatarUrl;
   }
 
   public String getUsername() {
@@ -68,11 +73,19 @@ public class User {
     this.repoCount = repoCount;
   }
 
-  public int getFollowerCount() {
-    return followerCount;
+  public String getUserUrl() {
+    return userUrl;
   }
 
-  public void setFollowerCount(int followerCount) {
-    this.followerCount = followerCount;
+  public void setUserUrl(String userUrl) {
+    this.userUrl = userUrl;
+  }
+
+  public String getAvatarUrl() {
+    return avatarUrl;
+  }
+
+  public void setAvatarUrl(String avatarUrl) {
+    this.avatarUrl = avatarUrl;
   }
 }
