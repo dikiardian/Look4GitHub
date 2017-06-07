@@ -3,9 +3,12 @@ package search;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import model.Repo;
 import model.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,7 +20,7 @@ import org.json.simple.parser.ParseException;
  */
 
 public class SearchEngine {
-  private String urlSearch;
+  final private String urlSearch = "https://api.github.com/search/users?";
   private String searchBy; //["login", "fullname", "email"]
   private boolean advanceSearch;
   private String sortBy; //["followers", "repositories"]
@@ -32,16 +35,12 @@ public class SearchEngine {
   private Map<String, User> result;
   private int resultCount;
   private int pageResult;
-  final private String clientID = "82b5ba0bb36f5d8c6b17";
-  final private String clientSecret = "347891e79e815871395d936adf803d68af56ef35";
-  final private int resultPerPage = 20;
 
-  public SearchEngine(String urlSearch, String searchBy, boolean advanceSearch,
-                      String sortBy, String order, String followerMin,
-                      String followerMax, String repoMin, String repoMax,
-                      String location, String language, String created,
-                      Map<String, User> result, int resultCount, int pageResult) {
-    this.urlSearch = urlSearch;
+  public SearchEngine(String searchBy, boolean advanceSearch, String sortBy,
+                      String order, String followerMin, String followerMax,
+                      String repoMin, String repoMax, String location,
+                      String language, String created, Map<String, User> result,
+                      int resultCount, int pageResult) {
     this.searchBy = searchBy;
     this.advanceSearch = advanceSearch;
     this.sortBy = sortBy;
@@ -82,13 +81,36 @@ public class SearchEngine {
     return result;
   }
 
+  public void getUserRepos(String username) {
+    String url = "https://api.github.com/users/" + username + "/repos";
+    List<Repo> repos = new ArrayList<>();
+    try {
+      String resultString = getDataRest(url);
+      JSONParser parser = new JSONParser();
+      JSONArray jsonArray = (JSONArray) parser.parse(resultString);
+      for (Object obj : jsonArray) {
+        JSONObject jasObj = (JSONObject) obj;
+        String name = jasObj.get("name")!=null ? jasObj.get("name").toString() : "null";
+        String description = jasObj.get("description")!=null ? jasObj.get("description").toString() : "null";
+        String repoUrl = jasObj.get("url")!=null ? jasObj.get("url").toString() : "null";
+        repos.add(new Repo(name, description, repoUrl));
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    result.get(username).setRepos(repos);
+  }
+
   public void searchUsers(String keyword) {
+    int resultPerPage = 20;
+    String clientID = "82b5ba0bb36f5d8c6b17";
+    String clientSecret = "347891e79e815871395d936adf803d68af56ef35";
     String url = urlSearch + "order=" + order +
         "&sort=" + sortBy +
         "&per_page=" + resultPerPage +
         "&page=" + pageResult +
         "&client_id=" + clientID +
-        "&client_secret=" + clientSecret+
+        "&client_secret=" + clientSecret +
         "&q=" + keyword +
         "+in:" + searchBy +
         "+type:user";
@@ -121,8 +143,8 @@ public class SearchEngine {
         }
       }
       int count = 1;
-      while ((resultPerPage*(pageResult-1) + count <= resultCount) ||
-          (count <= resultPerPage)) {
+      while (((resultPerPage*(pageResult-1) + count <= resultCount) ||
+          (count <= resultPerPage)) && resultCount!=0) {
         for (Object obj : jsonArray) {
           JSONObject jasObj = (JSONObject) obj;
           result.put(jasObj.get("login").toString(), new User(jasObj.get("login").toString(),
@@ -137,10 +159,6 @@ public class SearchEngine {
 
   public String getUrlSearch() {
     return urlSearch;
-  }
-
-  public void setUrlSearch(String urlSearch) {
-    this.urlSearch = urlSearch;
   }
 
   public String getSearchBy() {
@@ -254,14 +272,5 @@ public class SearchEngine {
   public void setPageResult(int pageResult) {
     this.pageResult = pageResult;
   }
-
-  public String getClientID() {
-    return clientID;
-  }
-
-  public String getClientSecret() {
-    return clientSecret;
-  }
-
 
 }

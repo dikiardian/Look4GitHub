@@ -1,3 +1,4 @@
+import model.Repo;
 import model.User;
 import search.SearchEngine;
 
@@ -12,15 +13,12 @@ import java.util.Scanner;
 public class Driver {
   public static void main(String[] args) {
     Map<String, User> resultSearch = new HashMap<>();
-    SearchEngine searchEngine = new SearchEngine("https://api.github.com/search/users?",
-        "login", false, "", "", "", "",
-        "", "", "", "", "", resultSearch, 0,
-        1);
-
+    SearchEngine searchEngine = new SearchEngine("login", false,
+        "", "", "", "", "", "",
+        "", "", "", resultSearch, 0, 1);
     System.out.print("keyword: ");
     Scanner scanner = new Scanner(System.in);
     String keyword = scanner.nextLine();
-
     String next;
     boolean stop = false;
     do {
@@ -30,14 +28,25 @@ public class Driver {
       }
       System.out.println("result : " + resultSearch.size() + "/" + searchEngine.getResultCount());
       if (resultSearch.size()<searchEngine.getResultCount()) {
-        System.out.print("next? ");
+        System.out.print("go to page: ");
         next = scanner.nextLine();
-        if (next.equals("y")) {
-          searchEngine.setPageResult(searchEngine.getPageResult() + 1);
-        } else {
+        if (next.equals("n")) {
           stop = true;
+        } else {
+          searchEngine.setPageResult(Integer.parseInt(next));
         }
       }
     } while(resultSearch.size()<searchEngine.getResultCount() && !stop);
+    if (searchEngine.getResultCount()!=0) {
+      System.out.print("pilih: ");
+      String pilih = scanner.nextLine();
+      searchEngine.getUserRepos(pilih);
+      System.out.println("getting.....\n");
+      for (Repo repo : resultSearch.get(pilih).getRepos()) {
+        System.out.println(repo.getNama());
+        System.out.println(repo.getDeskripsi());
+        System.out.println(repo.getUrl() + "\n");
+      }
+    }
   }
 }
