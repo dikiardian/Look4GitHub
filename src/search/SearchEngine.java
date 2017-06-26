@@ -82,7 +82,11 @@ public class SearchEngine {
   }
 
   public void getUserRepos(String username) {
-    String url = "https://api.github.com/users/" + username + "/repos";
+    String clientID = "82b5ba0bb36f5d8c6b17";
+    String clientSecret = "347891e79e815871395d936adf803d68af56ef35";
+    String url = "https://api.github.com/users/" + username + "/repos?" +
+        "client_id=" + clientID +
+        "&client_secret=" + clientSecret;
     List<Repo> repos = new ArrayList<>();
     try {
       String resultString = getDataRest(url);
@@ -102,9 +106,9 @@ public class SearchEngine {
   }
 
   public void searchUsers(String keyword) {
-    int resultPerPage = 20;
     String clientID = "82b5ba0bb36f5d8c6b17";
     String clientSecret = "347891e79e815871395d936adf803d68af56ef35";
+    int resultPerPage = 10;
     String url = urlSearch + "order=" + order +
         "&sort=" + sortBy +
         "&per_page=" + resultPerPage +

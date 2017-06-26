@@ -2,9 +2,6 @@ package model;
 
 import java.util.List;
 
-/**
- * Created by Diki Ardian W on 6/5/17.
- */
 
 public class User {
   private String username;

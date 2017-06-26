@@ -1,6 +1,3 @@
-/**
- * Created by Diki Ardian W on 6/5/17.
- */
 
 package model;
 
