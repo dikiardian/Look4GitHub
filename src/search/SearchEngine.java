@@ -35,6 +35,7 @@ public class SearchEngine {
   private Map<String, User> result;
   private int resultCount;
   private int pageResult;
+  final private int resultPerPage = 5;
 
   public SearchEngine(String searchBy, boolean advanceSearch, String sortBy,
                       String order, String followerMin, String followerMax,
@@ -108,7 +109,6 @@ public class SearchEngine {
   public void searchUsers(String keyword) {
     String clientID = "82b5ba0bb36f5d8c6b17";
     String clientSecret = "347891e79e815871395d936adf803d68af56ef35";
-    int resultPerPage = 10;
     String url = urlSearch + "order=" + order +
         "&sort=" + sortBy +
         "&per_page=" + resultPerPage +
@@ -277,4 +277,7 @@ public class SearchEngine {
     this.pageResult = pageResult;
   }
 
+  public int getResultPerPage() {
+    return resultPerPage;
+  }
 }

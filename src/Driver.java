@@ -6,15 +6,16 @@ import javax.swing.*;
 
 public class Driver {
   public static void main(String[] args) {
-    try {
-      // select Look and Feel
-      UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
-      // start application
-      new Look4GitHub();
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-    }
+    new Look4GitHub();
+//    try {
+//      // select Look and Feel
+//      UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
+//      // start application
+//      new Look4GitHub();
+//    }
+//    catch (Exception ex) {
+//      ex.printStackTrace();
+//    }
 
 //    Map<String, User> resultSearch = new HashMap<>();
 //    SearchEngine searchEngine = new SearchEngine("login", false,
